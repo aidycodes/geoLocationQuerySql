@@ -11,6 +11,8 @@ const Body = z.object({
     r: z.number()
 })
 
+
+
 type Body = z.infer<typeof Body>
 
 const Home: NextPage = () => {
@@ -48,6 +50,7 @@ const Home: NextPage = () => {
   }
 
   const getGeoData = async () => {
+    if(data){
      try{
     const res = await fetch('http://localhost:3000/api/postsnearme', {
       method: 'POST',
@@ -60,13 +63,13 @@ const Home: NextPage = () => {
         r:100
       })
     })
-     
+  
     console.log(res.json())
-     
+        
   }catch(err){
     return err
   }
-
+    }
   }
   
 
