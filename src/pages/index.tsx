@@ -3,6 +3,15 @@ import Head from "next/head";
 import { useStaticGeoLocation } from "~/hooks/useStaticGeolocation";
 import { useGeolocation } from "~/hooks/useGeolocation";
 import { useEffect, useState } from "react";
+import { z } from "zod";
+
+const Body = z.object({
+    lat: z.number(),
+    lng: z.number(),
+    r: z.number()
+})
+
+type Body = z.infer<typeof Body>
 
 const Home: NextPage = () => {
 
@@ -38,6 +47,29 @@ const Home: NextPage = () => {
   data:  object
   }
 
+  const getGeoData = async () => {
+     try{
+    const res = await fetch('http://localhost:3000/api/postsnearme', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        lat: data.lat,
+        lng: data.lng,
+        r:100
+      })
+    })
+     
+    console.log(res.json())
+     
+  }catch(err){
+    return err
+  }
+
+  }
+  
+
 
   
 
@@ -61,6 +93,8 @@ const Home: NextPage = () => {
          <button onClick={() =>{
           void post()
          }}>send data</button>
+         <button onClick={() => {
+          void getGeoData()}}>Get Data Near Me</button>
       </main>
     </>
   );
