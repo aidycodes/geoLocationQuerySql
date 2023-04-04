@@ -2,11 +2,50 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useStaticGeoLocation } from "~/hooks/useStaticGeolocation";
 import { useGeolocation } from "~/hooks/useGeolocation";
+import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
 
+  const [input, setInput] = useState('')
+
   const data = useStaticGeoLocation()
   console.log(data)
+
+  const post = async () => {
+
+    try{
+    const res = await fetch('http://localhost:3000/api/geo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        input,
+        data
+      })
+    })
+    //const json = await res.json()!
+   // console.log(json)
+    
+  }catch(err){
+    return err
+  }
+
+  }
+
+  interface Post {
+  content: string,
+  data:  object
+  }
+
+
+  
+
+  useEffect(() => {
+   fetch('http://localhost:3000/api/data').then((data) => data.json())
+   .then((data) => console.log(data)).catch((err) => console.log(err))
+  }, [])
+
   return (
     <>
       <Head>
@@ -18,6 +57,10 @@ const Home: NextPage = () => {
       <main className="">
         GeoLocation Form   
          {JSON.stringify(data)}   
+         <input onChange={(e) => setInput(e.target.value)}/>
+         <button onClick={() =>{
+          void post()
+         }}>send data</button>
       </main>
     </>
   );
