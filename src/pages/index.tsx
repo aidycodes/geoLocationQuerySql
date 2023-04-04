@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   const post = async () => {
 
     try{
-    const res = await fetch('http://localhost:3000/api/geo', {
+    const res = await fetch('http://https://geo-location-query-sql.vercel.app/api/geo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ const Home: NextPage = () => {
   const getGeoData = async () => {
     if(data){
      try{
-    const res = await fetch('http://localhost:3000/api/postsnearme', {
+    const res = await fetch('http://https://geo-location-query-sql.vercel.app/api/postsnearme', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ const Home: NextPage = () => {
   
 
   useEffect(() => {
-   fetch('http://localhost:3000/api/data').then((data) => data.json())
+   fetch('http://https://geo-location-query-sql.vercel.app/api/data').then((data) => data.json())
    .then((data) => console.log(data)).catch((err) => console.log(err))
   }, [])
 
