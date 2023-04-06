@@ -18,6 +18,8 @@ type Body = z.infer<typeof Body>
 const Home: NextPage = () => {
 
   const [input, setInput] = useState('')
+  const [pos, setPos] = useState({x:0, y:0})
+  const [move, setMove] = useState(false)
 
   const data = useStaticGeoLocation()
   console.log(data)
@@ -25,7 +27,7 @@ const Home: NextPage = () => {
   const post = async () => {
 
     try{
-    const res = await fetch('https://geo-location-query-sql.vercel.app/api/geo', {
+    const res = await fetch('/api/geo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -51,8 +53,9 @@ const Home: NextPage = () => {
 
   const getGeoData = async () => {
     if(data){
+   
      try{
-    const res = await fetch('https://geo-location-query-sql.vercel.app/api/postsnearme', {
+    const res = await fetch('/api/postsnearme', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -72,12 +75,33 @@ const Home: NextPage = () => {
     }
   }
   
-
-
+    const getGeoDataRadiusEdition = async () => {
+    if(data){
+     try{
+    const res = await fetch('/api/postswithinradius', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        lat: data.lat,
+        lng: data.lng,
+        r:1
+      })
+    })
   
+    console.log(res.json())
+        
+  }catch(err){
+    return err
+  }
+    }
+  }
+
+
 
   useEffect(() => {
-   fetch('https://geo-location-query-sql.vercel.app/api/data').then((data) => data.json())
+   fetch('/api/data').then((data) => data.json())
    .then((data) => console.log(data)).catch((err) => console.log(err))
   }, [])
 
@@ -98,6 +122,12 @@ const Home: NextPage = () => {
          }}>send data</button>
          <button onClick={() => {
           void getGeoData()}}>Get Data Near Me</button>
+           <button style={{border:"black", padding:'2rem'}} onClick={() =>{
+          void post()
+         }}>send data</button>
+         <button onClick={() => {
+          void getGeoDataRadiusEdition()}}>Get Data Near Me</button>
+
       </main>
     </>
   );
