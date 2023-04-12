@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.0",
     "@prisma/client": "^4.11.0",
     "next": "^13.2.4",
     "react": "18.2.0",

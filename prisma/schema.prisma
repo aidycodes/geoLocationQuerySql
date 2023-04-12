@@ -18,3 +18,41 @@ model Post {
     lng       Float
     content   String
 }
+
+model GeoPost {
+    id         String                                @id @default(cuid())
+    userid     String
+    user       GeoUser                               @relation(fields: [userid], references: [id])
+    created_at DateTime                              @default(now())
+    update_at  DateTime?                             @updatedAt
+    coords     Unsupported("geometry(Point, 4326)")?
+    content    String
+    replies    GeoReply[]
+
+    @@index([coords], name: "location_idx", type: Gist)
+}
+
+model GeoReply {
+    id        String   @id @default(cuid())
+    postid    String
+    userid    String
+    user      GeoUser  @relation(fields: [userid], references: [id])
+    post      GeoPost  @relation(fields: [postid], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    content   String
+
+    @@index([postid, createdAt(sort: Desc)])
+}
+
+model GeoUser {
+    id         String                                @id @default(cuid())
+    created_at DateTime                              @default(now())
+    updated_at DateTime?                             @updatedAt
+    username   String
+    coords     Unsupported("geometry(Point, 4326)")?
+    posts      GeoPost[]
+    replies    GeoReply[]
+
+    @@index([id])
+}
