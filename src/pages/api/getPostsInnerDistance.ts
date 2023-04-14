@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
 import z from "zod";
-import { Post } from "@prisma/client";
+import { Post, Prisma } from "@prisma/client";
 
 const Body = z.object({
     lat: z.number(),
@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const result = Body.safeParse(req.body)
         if(result.success){ 
             const {lng, lat, r} = result.data          
-    const query = await prisma.$queryRawUnsafe<{ id: string }[]>(
-            `SELECT "GeoUser"."id", "GeoUser"."id", "GeoPost"."created_at", username, content, "GeoPost"."coords"::text 
+    const query = await prisma.$queryRaw<{ id: string }[]>(
+           Prisma.sql`SELECT "GeoUser"."id", "GeoUser"."id", "GeoPost"."created_at", username, content, "GeoPost"."coords"::text 
                 FROM "GeoPost" 
             RIGHT JOIN "GeoUser" ON "GeoPost"."userid" = "GeoUser"."id" 
             WHERE ST_DWithin("GeoPost"."coords"

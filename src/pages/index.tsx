@@ -4,6 +4,8 @@ import { useStaticGeoLocation } from "~/hooks/useStaticGeolocation";
 import { useGeolocation } from "~/hooks/useGeolocation";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import { useRouter } from "next/router";
+import Chat from "~/compo/chat";
 
 const Body = z.object({
     lat: z.number(),
@@ -20,6 +22,9 @@ const Home: NextPage = () => {
   const [input, setInput] = useState('')
   const [pos, setPos] = useState({x:0, y:0})
   const [move, setMove] = useState(false)
+  const [sender, setSender] = useState("");
+  const router = useRouter();
+
 
   const data = useStaticGeoLocation()
   console.log(data)
@@ -34,8 +39,8 @@ const Home: NextPage = () => {
       },
       body: JSON.stringify({
         content:input,
-        lat: data.lat,
-        lng: data.lng,
+        lat: 95.7129,
+        lng: 37.0902,
         userId:'2'
       })
     })
@@ -235,6 +240,47 @@ const createUser = async () => {
   }    
 }
 
+  const FollowUser = async () => {  
+     try{    
+    const res = await fetch('/api/FollowUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId:"2",
+        followingId:"33",
+      })
+    })
+  
+    console.log(res.json())
+        
+  }catch(err){
+    return err
+  }    
+}
+
+const userFeed = async () => {  
+     try{    
+    const res = await fetch('/api/getUserFeed', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId:"2",
+        followingId:"33",
+      })
+    })
+  
+    console.log(res.json())
+        
+  }catch(err){
+    return err
+  }    
+}
+
+
 
 
   useEffect(() => {
@@ -294,7 +340,19 @@ const createUser = async () => {
             <button onClick={() => {
           void getOutterPosts()}}>Outter Posts</button>
           </div>
-
+          <div>
+            <button onClick={() => {
+          void FollowUser()}}>Follow User</button>
+          </div>
+          <div>
+            <button onClick={() => {
+          void userFeed()}}>User Feed</button>
+          </div>
+          <div>
+            <h2>Username</h2>
+            <input placeholder="username"  onChange={(e) => setSender(e.target.value)}></input>
+       </div>
+              <Chat sender={sender}/>
 
       </main>
     </>

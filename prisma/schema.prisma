@@ -14,6 +14,8 @@ model Post {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    userId    String
+    user      GeoUser  @relation(fields: [userId], references: [id])
     lat       Float
     lng       Float
     content   String
@@ -46,13 +48,16 @@ model GeoReply {
 }
 
 model GeoUser {
-    id         String                                @id @default(cuid())
-    created_at DateTime                              @default(now())
-    updated_at DateTime?                             @updatedAt
-    username   String
-    coords     Unsupported("geometry(Point, 4326)")?
-    posts      GeoPost[]
-    replies    GeoReply[]
+    id          String                                @id @default(cuid())
+    created_at  DateTime                              @default(now())
+    updated_at  DateTime?                             @updatedAt
+    username    String
+    coords      Unsupported("geometry(Point, 4326)")?
+    posts       GeoPost[]
+    nonGeoPosts Post[]
+    replies     GeoReply[]
+    followedBy  GeoUser[]                             @relation("UserFollows")
+    following   GeoUser[]                             @relation("UserFollows")
 
     @@index([id])
 }

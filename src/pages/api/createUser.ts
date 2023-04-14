@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try{
                 const newId = createId()  //new cuid
                 const {username, lat, lng } = typedBody.data 
-            //sql query to insert a geopost into the database
+            //sql query to insert a user into the database
             const query = await prisma.$queryRaw<{ id: string }[]>(
             Prisma.sql`INSERT INTO "GeoUser" (id, username, coords )
                 VALUES (${newId}, ${username}, ST_SetSRID(ST_Point(${lng}, ${lat}),4326))

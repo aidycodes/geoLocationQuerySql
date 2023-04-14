@@ -7,6 +7,12 @@ import { z } from "zod";
 const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
+  PUSHER_APP_ID: z.string(),  
+  PUSHER_KEY:z.string(),   
+  PUSHER_SECRET: z.string(),
+  PUSHER_CLUSTER: z.string(),
+  NEXT_PUBLIC_KEY: z.string(),
+  
 });
 
 /**
@@ -26,6 +32,12 @@ const client = z.object({
 const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
+  PUSHER_APP_ID: process.env.PUSHER_APP_ID,  
+  PUSHER_KEY: process.env.PUSHER_KEY,   
+  PUSHER_SECRET: process.env.PUSHER_SECRET,
+  PUSHER_CLUSTER: process.env.PUSHER_CLUSTER,
+  NEXT_PUBLIC_KEY: process.env.NEXT_PUBLIC_KEY,
+  
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
